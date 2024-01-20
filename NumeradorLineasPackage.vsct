@@ -72,7 +72,12 @@
     </Bitmaps>
   </Commands>
 
-  <Symbols>
+	<KeyBindings>
+		<KeyBinding guid="guidNumeradorLineasPackageCmdSet" id="NumeradorId" editor="guidVSStd97" key1="N" mod1="ALT"></KeyBinding>
+	</KeyBindings>
+
+
+	<Symbols>
     <!-- This is the package guid. -->
     <GuidSymbol name="guidNumeradorLineasPackage" value="{c05df66a-5429-4391-aecc-2161137ff872}" />
 
