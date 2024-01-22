@@ -113,7 +113,7 @@ namespace NumeradorLineas
                 ITextSnapshotLine startLine = textView.TextSnapshot.GetLineFromPosition(textView.Selection.Start.Position);
                 ITextSnapshotLine endLine = textView.TextSnapshot.GetLineFromPosition(textView.Selection.End.Position);
 
-                int cont = 1;
+                int cont = 100;
 
                 // Recorre cada línea y agrega el número
                 for (int lineNumber = startLine.LineNumber; lineNumber <= endLine.LineNumber; lineNumber++)
@@ -142,7 +142,8 @@ namespace NumeradorLineas
                         // Reemplaza el texto de la línea con el número
                         using (ITextEdit edit = snapshot.TextBuffer.CreateEdit())
                         {
-                            edit.Insert(iPos, cont++.ToString() + ": ");
+                            edit.Insert(iPos, cont.ToString() + ": ");
+                            cont += 10;
                             edit.Apply();
                         }
                     }

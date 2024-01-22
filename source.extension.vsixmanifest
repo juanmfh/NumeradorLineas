@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
 	<Metadata>
-		<Identity Id="NumeradorLineas.94bf636e-b517-493e-a1e7-912dc2015d10" Version="1.2" Language="es-ES" Publisher="Juan María Frías Hidalgo" />
+		<Identity Id="NumeradorLineas.94bf636e-b517-493e-a1e7-912dc2015d10" Version="1.21" Language="es-ES" Publisher="Juan María Frías Hidalgo" />
 		<DisplayName>NumeradorLineas</DisplayName>
 		<Description xml:space="preserve">Numerador de líneas de código seleccionadas</Description>
 		<MoreInfo>https://github.com/juanmfh/NumeradorLineas</MoreInfo>
