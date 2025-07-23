@@ -12,6 +12,7 @@ using Task = System.Threading.Tasks.Task;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Text.Classification;
+using System.Drawing.Imaging;
 
 namespace NumeradorLineas
 {
@@ -115,6 +116,9 @@ namespace NumeradorLineas
 
                 int cont = 100;
 
+                bool ifAbierto = false;
+                bool selectCaseAbierto = false;
+
                 // Recorre cada línea y agrega el número
                 for (int lineNumber = startLine.LineNumber; lineNumber <= endLine.LineNumber; lineNumber++)
                 {
@@ -139,15 +143,88 @@ namespace NumeradorLineas
                             }
                         }
 
-                        // Reemplaza el texto de la línea con el número
-                        using (ITextEdit edit = snapshot.TextBuffer.CreateEdit())
+                        bool bIgnorarNumeracion = false;
+
+                        if (selectCaseAbierto)
                         {
-                            edit.Insert(iPos, cont.ToString() + ": ");
-                            cont += 10;
-                            edit.Apply();
+                            if (firstWord(lineText.ToUpper()).StartsWith("CASE"))
+                            {
+                                selectCaseAbierto = false;
+
+                                bIgnorarNumeracion = true;
+                            }
+                        }
+
+                        if(ifAbierto)
+                        {
+                            if (lineText.EndsWith("Then"))
+                            {
+                                ifAbierto = false;
+
+                                bIgnorarNumeracion = true;
+                            }
+                        }
+
+                        if (!bIgnorarNumeracion)
+                        {
+                            if (firstWord(lineText.ToUpper()).StartsWith("SELECT"))
+                            {
+                                selectCaseAbierto = true;
+                            }
+                            else if (firstWord(lineText.ToUpper()).StartsWith("IF") && !lineText.ToUpper().EndsWith("Then"))
+                            {
+                                // Si hay un if multilínea no se numera la línea hasta que termine
+                                ifAbierto = true;
+                            }
+
+                            // Reemplaza el texto de la línea con el número
+                            using (ITextEdit edit = snapshot.TextBuffer.CreateEdit())
+                            {
+                                edit.Insert(iPos, cont.ToString() + ": ");
+                                cont += 10;
+                                edit.Apply();
+                            }
                         }
                     }
                 }
+            }
+        }
+
+
+        private String firstWord(String line)
+        {
+            int currentNum;
+            string linproc = line;
+            if (line.Contains(":") && int.TryParse(line.Substring(0, line.IndexOf(":")), out currentNum))
+            {
+                linproc = line.Substring(line.IndexOf(":") + 1);
+            }
+
+            int indexSpace = linproc.Trim().IndexOf(' ');
+            int indexTab = linproc.Trim().IndexOf("\t");
+
+            if (indexSpace != -1 && indexTab != -1 )
+            {
+                if (indexSpace < indexTab)
+                {
+                    return linproc.Trim().Substring(0, indexSpace);
+                }
+                else
+                {
+                    return linproc.Trim().Substring(0, indexTab);
+                }
+            }
+            else if (indexSpace != -1)
+            {
+                return linproc.Trim().Substring(0, indexSpace);
+            }
+            else if (indexTab != -1)
+            {
+                return linproc.Trim().Substring(0, indexTab);
+            }
+            else
+            {
+                return linproc.Trim();
             }
         }
 
